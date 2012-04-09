@@ -1,0 +1,49 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+#background {
+    position: fixed;
+    width: 180%;
+    height: 100%;
+    background-image:url('../img/bk.png');
+    background-repeat : no-repeat;
+}
+
+
+table.sample{
+    border:1px solid #ffffff;
+    border-collapse:collapse;
+    border-spacing:0;
+    color: #00ffff;
+}
+
+.sample td{
+}
+
+table {
+}
+
+td, th {
+border: 1px #2b2b2b solid;
+border-color:#F2B600;
+color:#F2B600;
+font-size: 15px
+}
+
+.today {
+border: 1px #ff0060 solid;
+border-color:#ff0060;
+color:#FFFFFF;
+font-size: 15px;
+border-style:dashed;
+}
+
+.selected_day {
+border: 1px #9370db solid;
+border-color:#9370db;
+color:#FFFFFF;
+font-size: 15px;
+bgcolor:#9370db;
+border-style:dashed;
+}
