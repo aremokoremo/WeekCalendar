@@ -1,0 +1,42 @@
+WeekCalendar
+
+[Overview]
+ Application helping to grasp
+ - the relationship between WeekNumber and Date.
+ - the position of a WeekNumber in Whole year. 
+
+[Author]
+ aremokoremo
+
+[Contents]
+
+ ├── WeekCalender.air (Adobe air application file)
+ ├── app.xml
+ ├── css
+ │   └── style.css
+ ├── img
+ │   ├── bk.png
+ │   └── bk.xcf
+ ├── js
+ │   └── main.js
+ ├── lib
+ │   └── air
+ │       ├── AIRAliases.js
+ │       ├── AIRIntrospector.js
+ │       ├── AIRLocalizer.js
+ │       ├── AIRMenuBuilder.js
+ │       └── AIRSourceViewer.js
+ └── main.html
+
+[How to install application]
+ Double click "WeekCalender.air"
+ (Adobe air is needed to be installed to use WeekCalender.air) 
+
+[How to build]
+ TBD
+
+[Web site]
+ http://d.hatena.ne.jp/aremokoremo/20120408/1333867484
+
+[history]
+ 2012/04/10 first ver created.
