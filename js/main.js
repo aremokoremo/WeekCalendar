@@ -133,10 +133,42 @@ function on_mouse_click() {
 //-----------------------
 
 //get week number
-//http://javascript.about.com/library/blweekyear.htm
+//(reference) http://javascript.about.com/library/blweekyear.htm
 Date.prototype.getWeek = function() {
   var onejan = new Date(this.getFullYear(),0,1);
-  return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+  ret = Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+
+  //ISO adaptation (Sunday = W X.7, NOT X.0)
+  if(this.getDay() == 0)
+  {
+    ret = ret - 1;
+  }
+
+  //ISO adaptation (W1 is the week having 1st Thursday)
+  if(onejan.getDay() == 5 || onejan.getDay() == 6 || onejan.getDay() == 0)
+  {
+    ret = ret - 1;
+    if(ret == 0)
+    {
+      var lastdayoflastyear = new Date(this.getFullYear()-1,11,31);
+      var onejanoflastyear = new Date(this.getFullYear()-1,0,1);
+
+      lastweekno = Math.ceil((((lastdayoflastyear - onejanoflastyear) / 86400000) + onejanoflastyear.getDay()+1)/7);
+      if(onejanoflastyear.getDay() == 0)
+      {
+        lastweekno = lastweekno + 1;
+      }
+
+      if(onejanoflastyear.getDay() == 5 || onejanoflastyear.getDay() == 6 || onejanoflastyear.getDay() == 0)
+      {
+        lastweekno = lastweekno -1;
+      }
+
+      ret = lastweekno;
+    }
+  }
+
+  return ret;
 }
 
 //uruu year
@@ -153,8 +185,10 @@ function initDate(){
 
   //today	
   myD = new Date();
-  todayYearTemp = myD.getYear();
-  todayYear = (todayYearTemp < 2000) ? todayYearTemp+1900 : todayYearTemp ;    
+  myD.setHours(0);
+  myD.setMinutes(0);
+  myD.setSeconds(0);
+  todayYear = myD.getFullYear();
   todayMonth   = myD.getMonth() + 1;
   todayDate    = myD.getDate();
   todayDay     = myD.getDay();
@@ -255,29 +289,28 @@ function showCalender(){
 }
 
 function createWeeknoForEachMonth(){
-  day_temp = new Date(2012,0,1);//month of js = real month -1
-  weekno_1 = day_temp.getWeek();
-  day_temp = new Date(2012,1,1);//month of js = real month -1
+  weekno_1 = 1;
+  day_temp = new Date(todayYear,1,1);//month of js = real month -1
   weekno_2 = day_temp.getWeek();
-  day_temp = new Date(2012,2,1);//month of js = real month -1
+  day_temp = new Date(todayYear,2,1);//month of js = real month -1
   weekno_3 = day_temp.getWeek();
-  day_temp = new Date(2012,3,1);//month of js = real month -1
+  day_temp = new Date(todayYear,3,1);//month of js = real month -1
   weekno_4 = day_temp.getWeek();
-  day_temp = new Date(2012,4,1);//month of js = real month -1
+  day_temp = new Date(todayYear,4,1);//month of js = real month -1
   weekno_5 = day_temp.getWeek();
-  day_temp = new Date(2012,5,1);//month of js = real month -1
+  day_temp = new Date(todayYear,5,1);//month of js = real month -1
   weekno_6 = day_temp.getWeek();
-  day_temp = new Date(2012,6,1);//month of js = real month -1
+  day_temp = new Date(todayYear,6,1);//month of js = real month -1
   weekno_7 = day_temp.getWeek();
-  day_temp = new Date(2012,7,1);//month of js = real month -1
+  day_temp = new Date(todayYear,7,1);//month of js = real month -1
   weekno_8 = day_temp.getWeek();
-  day_temp = new Date(2012,8,1);//month of js = real month -1
+  day_temp = new Date(todayYear,8,1);//month of js = real month -1
   weekno_9 = day_temp.getWeek();
-  day_temp = new Date(2012,9,1);//month of js = real month -1
+  day_temp = new Date(todayYear,9,1);//month of js = real month -1
   weekno_10 = day_temp.getWeek();
-  day_temp = new Date(2012,10,1);//month of js = real month -1
+  day_temp = new Date(todayYear,10,1);//month of js = real month -1
   weekno_11 = day_temp.getWeek();
-  day_temp = new Date(2012,11,1);//month of js = real month -1
+  day_temp = new Date(todayYear,11,1);//month of js = real month -1
   weekno_12 = day_temp.getWeek();    
 }
 
@@ -288,13 +321,19 @@ function createWeeknoForEachMonth(){
 function showToday(){
   today_x = culcDateX(todayMonth, todayDate);
  
+  dow = todayDay;
+  if(dow == 0)
+  {
+    dow = 7;
+  }
+
   var div = document.getElementById("divID_today");
   var str = "";
   str += "<TABLE border=0 cellspacing=0 cellpadding=0>";
   str += "<TBODY>";
   str += "<TR>";
   str += "<TD class=\"today\" bgcolor=\"#ff0060\"><FONT color=\"#FFFFFF\"><STRONG>";
-  str += "W"+todayWeekno+"."+todayDay+" (" + todayMonth + "/"+ todayDate.toString()+ ")" /*+ "(dbg x="+Math.floor(today_x.toString())+")"*/; 
+  str += "W"+todayWeekno+"."+dow+" (" + todayMonth + "/"+ todayDate.toString()+ ")" /*+ "(dbg x="+Math.floor(today_x.toString())+")"*/;
 //  str += "W"+todayWeekno+"."+todayDay+" = (" + todayMonth + "/"+ todayDate.toString()+ ")" ; 
   str += "</STRONG></FONT></TD>";
   str += "</TR>";
@@ -393,6 +432,11 @@ function showDaySelected(x){
   date_temp = culcDate(x);  
   weekno    =date_temp.getWeek();
   day       =date_temp.getDay();
+  if(day==0)
+  {
+    day = 7;
+  }
+
   month     =date_temp.getMonth()+1;
   date      =date_temp.getDate();
   
