@@ -145,9 +145,30 @@ Date.prototype.getWeek = function() {
   }
 
   //ISO adaptation (W1 is the week having 1st Thursday)
-  if(onejan.getDay() == 5 || onejan.getDay() == 6 || onejan.getDay() == 0)
+  if(onejan.getDay() == 5 || onejan.getDay() == 6)
   {
     ret = ret - 1;
+    if(ret == 0)
+    {
+      var lastdayoflastyear = new Date(this.getFullYear()-1,11,31);
+      var onejanoflastyear = new Date(this.getFullYear()-1,0,1);
+
+      lastweekno = Math.ceil((((lastdayoflastyear - onejanoflastyear) / 86400000) + onejanoflastyear.getDay()+1)/7);
+      if(onejanoflastyear.getDay() == 0)
+      {
+        lastweekno = lastweekno + 1;
+      }
+
+      if(onejanoflastyear.getDay() == 5 || onejanoflastyear.getDay() == 6 || onejanoflastyear.getDay() == 0)
+      {
+        lastweekno = lastweekno -1;
+      }
+
+      ret = lastweekno;
+    }
+  }
+  else if (onejan.getDay() == 0)
+  {
     if(ret == 0)
     {
       var lastdayoflastyear = new Date(this.getFullYear()-1,11,31);

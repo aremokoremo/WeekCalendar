@@ -41,3 +41,4 @@ WeekCalendar
 [history]
  Ver1.0  2012/04/10 first ver created.
  Ver1.1  2015/01/03 ISO 8601 adaptation.
+ Ver1.2  2017/01/31 Fix the bug occhrred when 1/1 is Sunday
